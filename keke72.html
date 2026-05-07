@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kéké 72 — Le Live TikTok</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: #13131c;
+      --accent: #ff0050;
+      --accent2: #69c9d0;
+      --text: #f0f0f0;
+      --muted: #888;
+      --border: rgba(255,0,80,0.18);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px 40px;
+      text-align: center;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,0,80,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(105,201,208,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .tiktok-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,0,80,0.12);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      animation: fadeDown 0.6s ease both;
+    }
+    .avatar-wrap {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin-bottom: 24px;
+      animation: fadeDown 0.7s 0.1s ease both;
+    }
+    .avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent), var(--accent2), var(--accent));
+      animation: spin 4s linear infinite;
+    }
+    .avatar-wrap img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 4px solid var(--bg);
+      z-index: 1;
+    }
+    .live-dot {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+      z-index: 2;
+      animation: pulse 1.4s ease infinite;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: 4px;
+      line-height: 1;
+      animation: fadeDown 0.7s 0.2s ease both;
+    }
+    h1 span { color: var(--accent); }
+    .handle {
+      color: var(--accent2);
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 3px;
+      margin-top: 8px;
+      animation: fadeDown 0.7s 0.3s ease both;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin: 36px auto 0;
+      max-width: 600px;
+      animation: fadeDown 0.7s 0.4s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--accent);
+      line-height: 1;
+      min-width: 80px;
+      min-height: 2.2rem;
+      border-bottom: 1px dashed rgba(255,0,80,0.3);
+      display: inline-block;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      margin: 48px auto 0;
+      border-radius: 2px;
+    }
+    .live-ticker {
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      margin: 20px 0 0;
+      width: 100%;
+    }
+    .live-ticker-inner {
+      display: inline-block;
+      animation: ticker 18s linear infinite;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .live-ticker-inner span { color: var(--accent); margin: 0 16px; }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+    .card:hover { border-color: rgba(255,0,80,0.45); }
+    .card-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .editable {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      width: 100%;
+      resize: vertical;
+      outline: none;
+      min-height: 80px;
+    }
+    .editable::placeholder { color: var(--muted); font-style: italic; }
+    .editable-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      width: 100%;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .editable-title::placeholder { color: #444; }
+    .hint {
+      font-size: 0.7rem;
+      color: #444;
+      letter-spacing: 1px;
+      margin-top: 10px;
+      text-align: right;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      transition: all 0.2s;
+    }
+    .link-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .link-btn.tiktok { border-color: rgba(105,201,208,0.3); }
+    .link-btn.tiktok:hover { background: var(--accent2); border-color: var(--accent2); color: #000; }
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.75rem;
+      color: #333;
+      letter-spacing: 1px;
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="tiktok-badge">🔴 Live TikTok</div>
+
+  <div class="avatar-wrap">
+    <img src="Kekekiwi.jpeg" alt="Kéké 72" />
+    <div class="live-dot"></div>
+  </div>
+
+  <h1>Kéké <span>72</span></h1>
+  <p class="handle">@keke_72 · TikTok Live</p>
+
+  <!-- ══ STATS : remplace les contenus vides par les vrais chiffres ══ -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num"> +200 </div>
+      <div class="stat-label">Abonnés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"> +800 </div>
+      <div class="stat-label">Likes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"> +100 </div>
+      <div class="stat-label">Lives</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="live-ticker">
+    <div class="live-ticker-inner">
+      🔴 En live presque tous les soirs <span>·</span> Rejoins le chat <span>·</span> Kéké 72 <span>·</span> TikTok Live Experience <span>·</span>
+      🔴 En live presque tous les soirs <span>·</span> Rejoins le chat <span>·</span> Kéké 72 <span>·</span> TikTok Live Experience <span>·</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Présentation -->
+  <div class="card">
+    <div class="card-label">Qui est Kéké 72 ?</div>
+    <input class="editable-title" type="text" placeholder="Le Meilleur Streamer TikTok"/>
+    <textarea class="editable" placeholder="Kéké72 ou Kevin Névêque vient de Sablé-sur-Sarthe et a actuellement 29 ans il est connu poue ses lives tiktok et n'habite pas dans un aribnb il ne bug pas bon sang de bonsoir et est chez opérateur orange"></textarea>
+    <p class="hint"></p>
+  </div>
+
+  <!-- Ses lives -->
+  <div class="card">
+    <div class="card-label">Ses Lives TikTok</div>
+    <textarea class="editable" placeholder="Ses lives Tiktoks font partie de la catégorie discussion et kéké intéragit beaucoup avec ses abonnés, mais attention à ne pas trop dépasser les limites sous peines d'être banni. Kéké joue aussi a Pokémon en live et son birthday pokémon est Gabite" style="min-height:100px;"></textarea>
+    <p class="hint"></p>
+  </div>
+
+  <!-- Moments cultes -->
+  <div class="card">
+    <div class="card-label">Sa communauté</div>
+    <textarea class="editable" placeholder="Kéké72 possède une multitudes de modérateur comme Lyly ou bien encore Cyril et encore Anubis son propre père, kéké a connu plusieurs crises en plein lives ce qui l'a rendu connu, il possède un hater particulier cliquepasok repostant ses lives " style="min-height:120px;"></textarea>
+    <p class="hint"></p>
+  </div>
+
+  <!-- Liens -->
+  <div class="card">
+    <div class="card-label">Retrouve-le</div>
+    <div class="links">
+      <!-- Remplace les # par les vraies URLs -->
+      <a class="link-btn tiktok" href="https://www.tiktok.com/@keke_8900?is_from_webapp=1&sender_device=pc" target="_blank">🎵 TikTok</a>
+      <a class="link-btn" href="https://www.instagram.com/kevin_leveque200?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">📸 Instagram</a>
+      <a class="link-btn" href="https://onlyfans.com/keke_72" target="_blank"> Onlyfans</a>
+    </div>
+    <p class="hint" style="margin-top:14px;"> Dédicace à tous les abonnés et a remibeaugoss</p>
+  </div>
+
+</main>
+
+<footer>© 2026 — Fan site non officiel Kéké 72 · Fait avec ❤️</footer>
+
+</body>
+</html>
